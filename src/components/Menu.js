@@ -14,15 +14,17 @@ export default function Navegacion() {
   return (
     <div>
       <div className="grid grid-cols-2 text-[#04b34a] font-bold text-2xl ">
-        <div className='ml-20 mt-6'>
-          <Image
-            src="/NonLogoCarrion.png"
-            width="100"
+        <div className='ml-20 mt-6 w-[290px]'>
+          <img src='LogoSideral.png'>
+          </img>
+          {/* <Image
+            src="/LogoSideral.png"
+            width="230"
             height="100"
             alt="Logotipo Sideral Carrion"
           >
 
-          </Image>
+          </Image> */}
         </div>
         <div >
           <nav className='mt-14 flex space-x-8'>

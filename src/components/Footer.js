@@ -10,9 +10,8 @@ export default function Footer() {
     return (
         <div>
             <hr className='mt-10 mb-10'></hr>
-
-            <div className='w-20 ml-20'>
-                <img src='NonLogoCarrion.png'></img>
+            <div className='w-[200px] ml-20'>
+                <img src='LogoSideralBold.png'></img>
             </div>
 
             <div className='mt-5 grid grid-cols-3 ml-20'>
