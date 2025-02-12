@@ -9,7 +9,10 @@ export default async function Galería() {
   return (
     <div>
       {pictures.map((picture, index) => (
-        <div key={index}>{picture.id}</div>
+        <div  key={index}>
+          <img src={picture.download_url}/>
+        </div>
+        
       ))}
     </div>
   )
