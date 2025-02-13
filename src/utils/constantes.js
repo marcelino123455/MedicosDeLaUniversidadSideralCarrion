@@ -2,14 +2,14 @@ export const Globallinks = [
     {name: 'Inicio',
       href: '/'
     }, 
-    {name: 'Solucion',
+    {name: 'Solución',
       href: '/solucion'
     }, 
-     {name: 'Nosotros',
-      href: '/nosotros'
+     {name: 'Ranking',
+      href: '/ranking'
     }, 
     // {name: 'Blog',
-    //   href: '/blog'
+    //   href: '/blog'  
     // },
     {name: 'Bibliografia',
       href: '/bibliografia'

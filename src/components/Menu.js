@@ -39,8 +39,11 @@ export default function Navegacion() {
             <div className='hover:text-[#7c2c9c]'>
               <Link href="/blog">Blog</Link>
             </div> */}
+            {/* #73eaf5 */}
+            {/* #ebff78 */}
+            {/*rgb(253, 255, 120) */}
             {links.map((link) => (
-              <div key={link.name} className={`hover:text-[#0eb6c7] ${pathName === link.href? "bg-[#73eaf5] rounded-md p-1 -mt-2" :""}`}>
+              <div key={link.name} className={`hover:text-[#0eb6c7] ${pathName === link.href? "bg-[#] p-1 -mt-2 border-b-[2px] border-[#04b34a]" :""}`}>
                 <Link  href={link.href} >
                 {link.name}
               </Link>
