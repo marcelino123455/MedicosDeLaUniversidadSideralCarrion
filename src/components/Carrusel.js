@@ -11,9 +11,14 @@ import React, { useState, useEffect, useRef } from 'react'
 import Autoplay from "embla-carousel-autoplay"
 
 const images = [
-    { href: "carrusel2.png", content: "Según la Organización Mundial de la Salud (2025), las enfermedades cardiovasculares son la principal causa de muerte a nivel mundial, siendo responsables de aproximadamente 17,9 millones de fallecimientos cada año. Estos trastornos incluyen la cardiopatía coronaria, los accidentes cerebrovasculares y las cardiopatías reumáticas, y más de cuatro de cada cinco defunciones por estas enfermedades se deben a cardiopatías coronarias y accidentes cerebrovasculares. Además, un tercio de estas muertes son prematuras, ocurriendo en personas menores de 70 años." },
-    { href: "carrusel1.png", content: "Así presentamos Hearth-Prevent, una herramienta que promete por la predicción de enfermedades cardiovasculares. Para así fomentar una mejora en la calidad de vida, el desarrollo pleno con nuestros seres queridos y la obtención de nuestras metas a largo plazo." },
-    // { href: "carrusel1.png", content: "3 " }
+    { href: "carrusel2.png", content: "Según la Organización Mundial de la Salud (2025), las enfermedades cardiovasculares son la principal causa de muerte a nivel mundial, siendo responsables de aproximadamente 17,9 millones de fallecimientos cada año. Estos trastornos incluyen la cardiopatía coronaria, los accidentes cerebrovasculares y las cardiopatías reumáticas, y más de cuatro de cada cinco defunciones por estas enfermedades se deben a cardiopatías coronarias y accidentes cerebrovasculares. Además, un tercio de estas muertes son prematuras, ocurriendo en personas menores de 70 años.", className: ""  },
+    {  href: "carrusel1.png", content: "Así presentamos Hearth-Prevent, una herramienta que promete por la predicción de enfermedades cardiovasculares. Para así fomentar una mejora en la calidad de vida, el desarrollo pleno con nuestros seres queridos y la obtención de nuestras metas a largo plazo.",
+        className: ""
+     },
+    
+    { href: "carrusel3.png", content: '"Un chequeo a tiempo puede salvar tu vida"', 
+        className: "text-6xl font-bold text-center"
+     }
 ];
 
 export default function Carrusel() {
@@ -56,7 +61,7 @@ export default function Carrusel() {
             </div>
 
             <div className="ml-20 mr-40 flex items-center text-justify">
-                <p className="">
+                <p className={images[currentIndex].className}>
                     {images[currentIndex].content}
                 </p>
             </div>
