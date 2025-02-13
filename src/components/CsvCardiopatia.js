@@ -110,7 +110,7 @@ export default function CsvCardiopatia() {
             <div className="flex flex-col items-center justify-center w-[300px] mx-auto text-center space-y-4">
                 <Label htmlFor="picture">A continuación suba el archivo en csv</Label>
                 <Input id="picture" type="file" onChange={handleFileChange} />
-                <Button className="" onClick={onSubmit} disabled={loading}>
+                <Button className="bg-[#27ab4b] pl-10 pr-10 hover:bg-[#1eb5c9]" onClick={onSubmit} disabled={loading}>
                     {loading ? "Enviando..." : "Enviar CSV"}
                 </Button>
             </div>
