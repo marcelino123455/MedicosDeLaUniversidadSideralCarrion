@@ -4,7 +4,17 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 import {
     Form,
     FormControl,
@@ -22,6 +32,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
 
 
 
@@ -130,6 +141,9 @@ const Options = {
 
 
 export default function Cardiopatia() {
+    const [loading, setLoding] = useState(false)
+    const [loaded, setLoaded] = useState(false)
+    const [result, setResult] = useState("")
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -156,44 +170,50 @@ export default function Cardiopatia() {
         return opciones.indexOf(value);
     }
 
+    function interpretateResult(number) {
+        return number === 0 ?
+            "Felicidades al parecer no presentas alguna enfermedad cardiovascular" :
+            "Hemos detectado que puedes tener una enfermedad cardiovascular, no te precoupes consulta con tu médio a tiempo"
+    }
     async function onSubmit(values) {
-            
-        
+
+
         try {
-            const response = await fetch("http://127.0.0.1:5000/predict", {
+            const response = await fetch("http://127.0.0.1:8000/predict", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(values)
             });
-    
+
             if (!response.ok) {
-                // toast({
-                //     title: "Error al enviar los datos",
-                //     description: `Código de error: ${response.status}`,
-                //     variant: "destructive",
-                //     className: "bg-red-500 text-white",
-                // });
+
                 throw new Error(`Error en la solicitud: ${response.status}`);
             }
-    
+
             const data = await response.json();
+            setResult(data)
+
             toast({
                 title: "Datos enviados correctamente",
-                // description: JSON.stringify(values),
                 className: "bg-green-500 text-white",
-              })
+            })
+            setLoaded(true)
+            setLoding(false)
+            console.log("Respuesta", data)
         } catch (error) {
+            console.log("error:", error)
+
             toast({
                 title: "Error al procesar, inténtalo nuevamente",
                 description: error.message,
                 variant: "destructive",
                 // className: "bg-blue-500 text-white",
             });
-        } 
+        }
     }
-    
+
     return (
         <div className='ml-20 mt-10'>
             <div>
@@ -218,7 +238,7 @@ export default function Cardiopatia() {
 
 
                                     <FormItem>
-                                        <FormLabel>{titles[field] +" [" + field + "]"}</FormLabel>
+                                        <FormLabel>{titles[field] + " [" + field + "]"}</FormLabel>
                                         <FormControl>
                                             {Options[field]?.hasOPtion === false ? (<Input type="text" {...formField} />)
                                                 :
@@ -265,6 +285,38 @@ export default function Cardiopatia() {
 
                 </Form>
 
+                <div>
+                    {loaded &&
+                        <Dialog open={loaded} onOpenChange={setLoaded}>
+                            {/* <DialogTrigger asChild>
+                                <Button variant="outline">Share</Button>
+                            </DialogTrigger> */}
+                            <DialogContent className="sm:max-w-md">
+                                <DialogHeader>
+                                    <DialogTitle>Resultados</DialogTitle>
+                                    <DialogDescription>
+                                        {/* Anyone who has this link will be able to view this. */}
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="flex items-center space-x-2">
+                                    <div className="text-justify grid flex-1 gap-2">
+                                        {
+                                            interpretateResult(result.condition)
+                                        }
+                                    </div>
+                                </div>
+                                <DialogFooter className="sm:justify-start">
+                                    <DialogClose asChild>
+                                        <Button className="bg-[#27ab4b] pl-10 pr-10 hover:bg-[#1eb5c9]" type="button" >
+                                            Close
+                                        </Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    }
+
+                </div>
             </div>
         </div>
     )
