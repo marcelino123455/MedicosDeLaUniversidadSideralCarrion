@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
+
 import {
     Form,
     FormControl,
@@ -21,21 +23,7 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 
-// const formSchema = z.object({
-//     age: z.coerce.number().min(1, "La edad es requerida."),
-//     sex: z.string().min(1, "El sexo es requerido."),
-//     cp: z.coerce.number().min(0, "El tipo de dolor en el pecho es requerido."),
-//     trestbps: z.coerce.number().min(1, "La presión arterial en reposo es requerida."),
-//     chol: z.coerce.number().min(1, "El nivel de colesterol es requerido."),
-//     fbs: z.coerce.number().min(0, "El nivel de azúcar en ayunas es requerido."),
-//     restecg: z.coerce.number().min(0, "Los resultados del electrocardiograma son requeridos."),
-//     thalach: z.coerce.number().min(1, "La frecuencia cardiaca máxima es requerida."),
-//     exang: z.coerce.number().min(0, "El dolor inducido por el ejercicio es requerido."),
-//     oldpeak: z.coerce.number().min(0, "La depresión del ST es requerida."),
-//     slope: z.coerce.number().min(0, "La pendiente del ST es requerida."),
-//     ca: z.coerce.number().min(0, "El número de vasos coloreados es requerido."),
-//     thal: z.coerce.number().min(0, "El tipo de talasemia es requerido."),
-// })
+
 
 
 const formSchema = z.object({
@@ -57,18 +45,36 @@ const formSchema = z.object({
 const Descriptions = {
     age: "La edad debe estar en años",
     sex: "Ingrese 'M' para masculino y 'F' para femenino", //options
-    cp: "Tipo de dolor en el pecho (0-3), [0:leve] [3:fuerte]", // options
+    cp: "Tipo de dolor en el pecho", // options
     trestbps: "Presión arterial en reposo (mmHg)",
     chol: "colestoral sérico en (mg/dl)",
-    fbs: "Nivel de azúcar en ayunas (>120 mg/dL: 1, si no: 0)", //options
+    fbs: "Nivel de azúcar en ayunas", //options
     restecg: "Resultados del electrocardiograma", //options
     thalach: "Frecuencia cardiaca máxima alcanzada",
-    exang: "Angina producida por el ejercicio (1 = Sí, 0 = No)", //options
+    exang: "Angina producida por el ejercicio", //options
     oldpeak: "Depresión del ST inducida por el ejercicio",
     slope: "Pendiente del segmento ST", //options
     ca: "Número de vasos coloreados por fluoroscopia (0-3)", //options
     thal: "Tipo de talasemia (0-3)", //options
 }
+
+const titles = {
+    age: "Edad",
+    sex: "Sexo",
+    cp: "Tipo de dolor en el pecho",
+    trestbps: "Presión arterial en reposo",
+    chol: "Colesterol sérico",
+    fbs: "Nivel de azúcar en ayunas (>120 mg/dL)",
+    restecg: "Resultados del electrocardiograma",
+    thalach: "Frecuencia cardiaca máxima",
+    exang: "Angina inducida por el ejercicio",
+    oldpeak: "Depresión del ST inducida por el ejercicio",
+    slope: "Pendiente del segmento ST",
+    ca: "Número de vasos coloreados por fluoroscopia",
+    thal: "Tipo de talasemia",
+};
+
+
 
 const Options = {
     age: {
@@ -142,15 +148,52 @@ export default function Cardiopatia() {
             thal: -1,
         },
     })
+    const { toast } = useToast()
+
 
     function generateValuesToCompute(field, value) {
         const opciones = Options[field]?.opciones || [];
         return opciones.indexOf(value);
     }
 
-    function onSubmit(values) {
-        console.log(values)
+    async function onSubmit(values) {
+            
+        
+        try {
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
+            });
+    
+            if (!response.ok) {
+                // toast({
+                //     title: "Error al enviar los datos",
+                //     description: `Código de error: ${response.status}`,
+                //     variant: "destructive",
+                //     className: "bg-red-500 text-white",
+                // });
+                throw new Error(`Error en la solicitud: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            toast({
+                title: "Datos enviados correctamente",
+                // description: JSON.stringify(values),
+                className: "bg-green-500 text-white",
+              })
+        } catch (error) {
+            toast({
+                title: "Error al procesar, inténtalo nuevamente",
+                description: error.message,
+                variant: "destructive",
+                // className: "bg-blue-500 text-white",
+            });
+        } 
     }
+    
     return (
         <div className='ml-20 mt-10'>
             <div>
@@ -163,7 +206,7 @@ export default function Cardiopatia() {
                 </p>
 
             </div>
-            <div>
+            <div className="ml-20 mr-20 mt-10">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 mr-20 grid grid-cols-2 gap-x-20">
                         {Object.keys(formSchema.shape).map((field, des) => (
@@ -175,7 +218,7 @@ export default function Cardiopatia() {
 
 
                                     <FormItem>
-                                        <FormLabel>{field}</FormLabel>
+                                        <FormLabel>{titles[field] +" [" + field + "]"}</FormLabel>
                                         <FormControl>
                                             {Options[field]?.hasOPtion === false ? (<Input type="text" {...formField} />)
                                                 :
@@ -184,14 +227,15 @@ export default function Cardiopatia() {
                                                     <Select
                                                         onValueChange={(value) => {
                                                             const index = generateValuesToCompute(field, value);
-                                                            formField.onChange(index); 
+                                                            formField.onChange(index);
                                                         }}
                                                         value={Options[field]?.opciones[parseInt(formField.value)] || ""}
                                                     >
 
                                                         <FormControl>
                                                             <SelectTrigger>
-                                                                <SelectValue placeholder={`Seleccione ${field}`} />
+                                                                <SelectValue placeholder={`Seleccione ${titles[field].charAt(0).toLowerCase() + titles[field].slice(1)}`} />
+
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
