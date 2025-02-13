@@ -14,7 +14,7 @@ export default function Navegacion() {
   return (
     <div>
       <div className="grid grid-cols-2 text-[#04b34a] font-bold text-2xl ">
-        <div className='ml-20 mt-6 w-[290px]'>
+        <div className='ml-20 mt-6 w-[290px]' >
           <img src='LogoSideral.png'>
           </img>
           {/* <Image
@@ -26,8 +26,8 @@ export default function Navegacion() {
 
           </Image> */}
         </div>
-        <div >
-          <nav className='mt-14 flex space-x-8'>
+        <div className='-ml-20'>
+          <nav className='mt-14 flex space-x-8 '>
             {/* <div className='hover:text-[#7c2c9c]'>
               <Link href="/">Inicio</Link>
             </div>
@@ -43,7 +43,7 @@ export default function Navegacion() {
             {/* #ebff78 */}
             {/*rgb(253, 255, 120) */}
             {links.map((link) => (
-              <div key={link.name} className={`hover:text-[#0eb6c7] ${pathName === link.href? "bg-[#] p-1 -mt-2 border-b-[2px] border-[#04b34a]" :""}`}>
+              <div key={link.name} className={`hover:text-[#0eb6c7]  ${pathName === link.href? "bg-[#] p-1 -mt-2 border-b-[2px] border-[#04b34a] hover:border-[#0eb6c7]" :""}`}>
                 <Link  href={link.href} >
                 {link.name}
               </Link>
