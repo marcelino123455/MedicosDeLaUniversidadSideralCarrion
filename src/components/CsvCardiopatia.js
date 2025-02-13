@@ -95,13 +95,11 @@ export default function CsvCardiopatia() {
                     {loading ? "Enviando..." : "Enviar CSV"}
                 </Button>
             </div>
-            <div>
+            <div className="grid grid-cols-3 gap-4">
                 {
                     result.map((paciente, i) => (
-                        <div key={i}>
+                        <div key={i} >
                             <Card className={`mt-5 ${getProbability(paciente.probability)[1]}`}>
-
-
                             <CardHeader >
                                 <CardTitle>Paciente Número: {paciente.index}</CardTitle>
                                 <CardDescription className={`${getProbability(paciente.probability)[1]}`}>{getProbability(paciente.probability)[0]}</CardDescription>
