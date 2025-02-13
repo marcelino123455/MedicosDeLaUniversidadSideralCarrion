@@ -171,12 +171,14 @@ export default function Cardiopatia() {
     }
 
     function interpretateResult(number) {
-        return number === 0 ?
-            "Felicidades al parecer no presentas alguna enfermedad cardiovascular" :
-            "Hemos detectado que puedes tener una enfermedad cardiovascular, no te precoupes consulta con tu médio a tiempo"
+        return number === 0
+            ? "Felicidades, al parecer no presentas alguna enfermedad cardiovascular."
+            : "Hemos detectado que puedes tener una enfermedad cardiovascular. No te preocupes, consulta con tu médico a tiempo.";
     }
+    
     async function onSubmit(values) {
-
+        console.log("values:", values)
+        setLoding(true)
 
         try {
             const response = await fetch("http://127.0.0.1:8000/predict", {
@@ -200,7 +202,6 @@ export default function Cardiopatia() {
                 className: "bg-green-500 text-white",
             })
             setLoaded(true)
-            setLoding(false)
             console.log("Respuesta", data)
         } catch (error) {
             console.log("error:", error)
@@ -211,6 +212,9 @@ export default function Cardiopatia() {
                 variant: "destructive",
                 // className: "bg-blue-500 text-white",
             });
+        } finally{
+            setLoding(false)
+
         }
     }
 
@@ -279,7 +283,7 @@ export default function Cardiopatia() {
                             />
                         ))}
                         <div className="mt-10 mx-auto">
-                            <Button className="bg-[#27ab4b] pl-10 pr-10 hover:bg-[#1eb5c9]" type="submit">Enviar</Button>
+                            <Button className="bg-[#27ab4b] pl-10 pr-10 hover:bg-[#1eb5c9]" type="submit">{loading===true?"Cargando . . .":"Enviar"}</Button>
                         </div>
                     </form>
 

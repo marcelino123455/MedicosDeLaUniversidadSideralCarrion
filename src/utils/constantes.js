@@ -8,8 +8,11 @@ export const Globallinks = [
      {name: 'Nosotros',
       href: '/nosotros'
     }, 
-    {name: 'Blog',
-      href: '/blog'
+    // {name: 'Blog',
+    //   href: '/blog'
+    // },
+    {name: 'Bibliografia',
+      href: '/bibliografia'
     },
   
   ]
