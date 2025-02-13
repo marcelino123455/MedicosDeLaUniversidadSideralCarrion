@@ -5,8 +5,8 @@ export const Globallinks = [
     {name: 'Solución',
       href: '/solucion'
     }, 
-     {name: 'Ranking',
-      href: '/ranking'
+     {name: 'Ranking clínico',
+      href: '/ranking-clinico'
     }, 
     // {name: 'Blog',
     //   href: '/blog'  

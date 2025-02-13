@@ -16,6 +16,15 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function CsvCardiopatia() {
     const { toast } = useToast()
@@ -78,41 +87,90 @@ export default function CsvCardiopatia() {
         if (numberFloat <= 0.3) {
             return ["Probabilidad baja", "bg-white-600 "]
         } else if (numberFloat <= 0.5) {
-            return ["Probabilidad media", "bg-green-400"]
-        }else if (numberFloat <= 0.7) {
-            return ["Probabilidad media alta", "bg-red-100"]
-        } else{
-            return ["Probabilidad alta", "bg-red-400 text-[#030000]"]
+            return ["Probabilidad media", "bg-[#c9ffd3]"]
+        } else if (numberFloat <= 0.7) {
+            return ["Probabilidad media alta", "bg-[#ffeed4]"]
+        } else {
+            return ["Probabilidad alta", "bg-[#ffc0ba] text-[#030000]"]
         }
+    }
+    function getNegrita(numberFloat) {
+        if (numberFloat > 0.7) {
+            return "font-bold italic"; 
+        }  
+        if (numberFloat > 0.5) {
+            return "font-bold";     
+        }  
+        return "";
     }
 
     return (
         <div className="mt-20 ml-20 mr-20">
+
             <div className="flex flex-col items-center justify-center w-[300px] mx-auto text-center space-y-4">
-                <Label  htmlFor="picture">A continuación suba el archivo en csv</Label>
+                <Label htmlFor="picture">A continuación suba el archivo en csv</Label>
                 <Input id="picture" type="file" onChange={handleFileChange} />
                 <Button className="" onClick={onSubmit} disabled={loading}>
                     {loading ? "Enviando..." : "Enviar CSV"}
                 </Button>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <h2 className="mt-10 mb-10 mx-auto flex flex-col items-center justify-cente">
+            </h2>
+
+            <Dialog className="mt-10 max-h-[80vh] w-full" open={loaded} onOpenChange={setLoaded}>
+                {/* <DialogTrigger asChild>
+                    <Button variant="outline">Edit Profile</Button>
+                </DialogTrigger> */}
+                <DialogContent className="max-w-4xl w-full h-auto max-h-screen overflow-y-auto">
+
+                    <DialogHeader className="mt-10 mx-auto font-bold text-[#04b34a]">
+                ORDEN DE ATENCION DE LOS PACIENTES CON POSIBLES PROBLEMAS CARDIACOS
+                <DialogTitle> </DialogTitle>
+                        <DialogDescription>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid grid-cols-2 gap-4">
                 {
                     result.map((paciente, i) => (
                         <div key={i} >
                             <Card className={`mt-5 ${getProbability(paciente.probability)[1]}`}>
-                            <CardHeader >
-                                <CardTitle>Paciente Número: {paciente.index}</CardTitle>
-                                <CardDescription className={`${getProbability(paciente.probability)[1]}`}>{getProbability(paciente.probability)[0]}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {paciente.probability}
-                            </CardContent>
-                        </Card>
+                                <CardHeader >
+                                    <CardTitle>Paciente Número {paciente.index}</CardTitle>
+                                    <CardDescription className={`${getProbability(paciente.probability)[1]}`}>Orden de atención {i + 1}</CardDescription>
+                                </CardHeader>
+                                <CardContent className={`${getNegrita(paciente.probability)}`}>
+                                
+                                {getProbability(paciente.probability)[0]}
+                                </CardContent>
+                            </Card>
                         </div>
 
                     ))
                 }
             </div>
+                    <DialogFooter>
+                        {/* <Button type="submit">Save changes</Button> */}
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            {/* <div className="grid grid-cols-2 gap-4">
+                {
+                    result.map((paciente, i) => (
+                        <div key={i} >
+                            <Card className={`mt-5 ${getProbability(paciente.probability)[1]}`}>
+                                <CardHeader >
+                                    <CardTitle>Paciente Número {paciente.index} con orden de atención: {i + 1}</CardTitle>
+                                    <CardDescription className={`${getProbability(paciente.probability)[1]}`}>{getProbability(paciente.probability)[0]}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    {paciente.probability}
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                    ))
+                }
+            </div> */}
 
 
         </div>
